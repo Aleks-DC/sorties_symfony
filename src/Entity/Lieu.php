@@ -35,11 +35,11 @@ class Lieu
      * @var Collection<int, Sortie>
      */
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieux')]
-    private Collection $sortie;
+    private Collection $sorties;
 
     public function __construct()
     {
-        $this->sortie = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,13 +107,13 @@ class Lieu
      */
     public function getSortie(): Collection
     {
-        return $this->sortie;
+        return $this->sorties;
     }
 
     public function addSortie(Sortie $sortie): static
     {
-        if (!$this->sortie->contains($sortie)) {
-            $this->sortie->add($sortie);
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
             $sortie->setLieux($this);
         }
 
@@ -122,7 +122,7 @@ class Lieu
 
     public function removeSortie(Sortie $sortie): static
     {
-        if ($this->sortie->removeElement($sortie)) {
+        if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
             if ($sortie->getLieux() === $this) {
                 $sortie->setLieux(null);

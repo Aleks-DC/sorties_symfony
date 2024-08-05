@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -39,6 +41,25 @@ class Sortie
     #[ORM\ManyToOne(inversedBy: 'sortie')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $lieux = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $siteOrganisateur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $organisateur = null;
+
+    /**
+     * @var Collection<int, Participant>
+     */
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sortiesPrevues')]
+    private Collection $estInscrit;
+
+    public function __construct()
+    {
+        $this->estInscrit = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +158,54 @@ class Sortie
     public function setLieux(?Lieu $lieux): static
     {
         $this->lieux = $lieux;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->siteOrganisateur;
+    }
+
+    public function setCampus(?Campus $siteOrganisateur): static
+    {
+        $this->siteOrganisateur = $siteOrganisateur;
+
+        return $this;
+    }
+
+    public function getParticipant(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setParticipant(?Participant $organisateur): static
+    {
+        $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getEstInscrit(): Collection
+    {
+        return $this->estInscrit;
+    }
+
+    public function addEstInscrit(Participant $estInscrit): static
+    {
+        if (!$this->estInscrit->contains($estInscrit)) {
+            $this->estInscrit->add($estInscrit);
+        }
+
+        return $this;
+    }
+
+    public function removeEstInscrit(Participant $estInscrit): static
+    {
+        $this->estInscrit->removeElement($estInscrit);
 
         return $this;
     }

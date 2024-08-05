@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
 class Etat
 {
+    const ETATS = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,11 +24,11 @@ class Etat
      * @var Collection<int, Sortie>
      */
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etats')]
-    private Collection $sortie;
+    private Collection $sorties;
 
     public function __construct()
     {
-        $this->sortie = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,15 +51,15 @@ class Etat
     /**
      * @return Collection<int, Sortie>
      */
-    public function getSortie(): Collection
+    public function getSorties(): Collection
     {
-        return $this->sortie;
+        return $this->sorties;
     }
 
     public function addSortie(Sortie $sortie): static
     {
-        if (!$this->sortie->contains($sortie)) {
-            $this->sortie->add($sortie);
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
             $sortie->setEtats($this);
         }
 
@@ -66,7 +68,7 @@ class Etat
 
     public function removeSortie(Sortie $sortie): static
     {
-        if ($this->sortie->removeElement($sortie)) {
+        if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
             if ($sortie->getEtats() === $this) {
                 $sortie->setEtats(null);
