@@ -56,22 +56,22 @@ class Etat
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sortie): static
+    public function addSortie(Sortie $sorties): static
     {
-        if (!$this->sorties->contains($sortie)) {
-            $this->sorties->add($sortie);
-            $sortie->setEtats($this);
+        if (!$this->sorties->contains($sorties)) {
+            $this->sorties->add($sorties);
+            $sorties->setEtats($this);
         }
 
         return $this;
     }
 
-    public function removeSortie(Sortie $sortie): static
+    public function removeSortie(Sortie $sorties): static
     {
-        if ($this->sorties->removeElement($sortie)) {
+        if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sortie->getEtats() === $this) {
-                $sortie->setEtats(null);
+            if ($sorties->getEtats() === $this) {
+                $sorties->setEtats(null);
             }
         }
 

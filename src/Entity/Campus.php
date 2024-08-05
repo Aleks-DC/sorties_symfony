@@ -62,22 +62,22 @@ class Campus
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sortie): static
+    public function addSortie(Sortie $sorties): static
     {
-        if (!$this->sorties->contains($sortie)) {
-            $this->sorties->add($sortie);
-            $sortie->setCampus($this);
+        if (!$this->sorties->contains($sorties)) {
+            $this->sorties->add($sorties);
+            $sorties->setCampus($this);
         }
 
         return $this;
     }
 
-    public function removeSortie(Sortie $sortie): static
+    public function removeSortie(Sortie $sorties): static
     {
-        if ($this->sorties->removeElement($sortie)) {
+        if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sortie->getCampus() === $this) {
-                $sortie->setCampus(null);
+            if ($sorties->getCampus() === $this) {
+                $sorties->setCampus(null);
             }
         }
 

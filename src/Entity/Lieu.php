@@ -110,22 +110,22 @@ class Lieu
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sortie): static
+    public function addSortie(Sortie $sorties): static
     {
-        if (!$this->sorties->contains($sortie)) {
-            $this->sorties->add($sortie);
-            $sortie->setLieux($this);
+        if (!$this->sorties->contains($sorties)) {
+            $this->sorties->add($sorties);
+            $sorties->setLieux($this);
         }
 
         return $this;
     }
 
-    public function removeSortie(Sortie $sortie): static
+    public function removeSortie(Sortie $sorties): static
     {
-        if ($this->sorties->removeElement($sortie)) {
+        if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sortie->getLieux() === $this) {
-                $sortie->setLieux(null);
+            if ($sorties->getLieux() === $this) {
+                $sorties->setLieux(null);
             }
         }
 
