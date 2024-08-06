@@ -21,10 +21,15 @@ class Participant
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column]
+    #[Assert\Regex(
+        pattern: '/^\+?[0-9]{7,15}$/',
+        message: 'Le numéro de téléphone doit contenir entre 7 et 15 chiffres.'
+    )]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email]
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
