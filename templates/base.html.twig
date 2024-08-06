@@ -18,25 +18,15 @@
 <body>
 <div class="container">
     <header>
-        <h1><a href="{{ path('main_home') }}"></a></h1>
-        {% include('inc/nav.html') %}
+        <h2>Ici est le header</h2>
     </header>
-
-    {# read and display all flash messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash flash-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
 
     <main>
         {% block body %}
+            <h2>Ici se trouve le main</h2>
         {% endblock %}
     </main>
     <footer>
-        {% include('inc/nav.html.twig') %}
         <div>&copy; {{ "now"|date('Y')}} Sortie-ENI</div>
     </footer>
 </div>
