@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Sorties ENI !{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+
+    {#  <link rel="icon" href="{{ asset(.png') }}">#}
+
+    {% block extrastyles %}{% endblock %}
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><a href="{{ path('main_home') }}"></a></h1>
+        {% include('inc/nav.html') %}
+    </header>
+
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <main>
+        {% block body %}
+        {% endblock %}
+    </main>
+    <footer>
+        {% include('inc/nav.html.twig') %}
+        <div>&copy; {{ "now"|date('Y')}} Sortie-ENI</div>
+    </footer>
+</div>
+</body>
+</html>
