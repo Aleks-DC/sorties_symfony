@@ -1,0 +1,13 @@
+
+{% block body %}
+    <div>
+        {{ form_start(serieForm) }}
+        {{ form_widget(serieForm) }}
+        <button>Modifier le profil</button>
+        {{ form_end(serieForm) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+Modifier le profil | {{ parent() }}
+{% endblock %}
