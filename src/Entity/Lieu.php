@@ -119,7 +119,7 @@ class Lieu
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
-            $sorties->setLieux($this);
+            $sorties->setLieu($this);
         }
 
         return $this;
@@ -129,8 +129,8 @@ class Lieu
     {
         if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorties->getLieux() === $this) {
-                $sorties->setLieux(null);
+            if ($sorties->getLieu() === $this) {
+                $sorties->setLieu(null);
             }
         }
 
