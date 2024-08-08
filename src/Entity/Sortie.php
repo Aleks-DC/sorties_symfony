@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,13 +21,13 @@ class Sortie
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateHeureDebut = null;
+    private ?DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $Duree = null;
+    private ?DateTimeInterface $Duree = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $dateLimiteInscription = null;
+    private ?DateTimeInterface $dateLimiteInscription = null;
 
     #[ORM\Column]
     private ?int $nbInscriptionsMax = null;
@@ -36,7 +37,7 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Etat $etats = null;
+    private ?Etat $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
@@ -49,6 +50,9 @@ class Sortie
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $organisateur = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $motifAnnulation = null;
 
     /**
      * @var Collection<int, Participant>
@@ -78,36 +82,36 @@ class Sortie
         return $this;
     }
 
-    public function getDateHeureDebut(): ?\DateTimeInterface
+    public function getDateHeureDebut(): ?DateTimeInterface
     {
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(\DateTimeInterface $dateHeureDebut): static
+    public function setDateHeureDebut(DateTimeInterface $dateHeureDebut): static
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
         return $this;
     }
 
-    public function getDuree(): ?\DateTimeInterface
+    public function getDuree(): ?DateTimeInterface
     {
         return $this->Duree;
     }
 
-    public function setDuree(\DateTimeInterface $Duree): static
+    public function setDuree(DateTimeInterface $Duree): static
     {
         $this->Duree = $Duree;
 
         return $this;
     }
 
-    public function getDateLimiteInscription(): ?\DateTimeInterface
+    public function getDateLimiteInscription(): ?DateTimeInterface
     {
         return $this->dateLimiteInscription;
     }
 
-    public function setDateLimiteInscription(\DateTimeInterface $dateLimiteInscription): static
+    public function setDateLimiteInscription(DateTimeInterface $dateLimiteInscription): static
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
 
@@ -138,16 +142,27 @@ class Sortie
         return $this;
     }
 
-    public function getEtats(): ?Etat
+    public function getEtat(): ?Etat
     {
-        return $this->etats;
+        return $this->etat;
     }
 
-    public function setEtats(?Etat $etats): static
+    public function setEtat(?Etat $etat): static
     {
-        $this->etats = $etats;
+        $this->etat = $etat;
 
         return $this;
+    }
+
+    public function setMotifAnnulation(?string $motifAnnulation): self
+    {
+        $this->motifAnnulation = $motifAnnulation;
+        return $this;
+    }
+
+    public function getMotifAnnulation(): ?string
+    {
+        return $this->motifAnnulation;
     }
 
     public function getLieux(): ?Lieu
@@ -162,12 +177,12 @@ class Sortie
         return $this;
     }
 
-    public function getCampus(): ?Campus
+    public function getSiteOrganisateur(): ?Campus
     {
         return $this->siteOrganisateur;
     }
 
-    public function setCampus(?Campus $siteOrganisateur): static
+    public function setSiteOrganisateur(?Campus $siteOrganisateur): static
     {
         $this->siteOrganisateur = $siteOrganisateur;
 

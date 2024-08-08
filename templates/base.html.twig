@@ -16,7 +16,6 @@
 
     {% block extrastyles %}{% endblock %}
 </head>
-<body>
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="flash flash-{{ label }}">
@@ -25,7 +24,6 @@
         {% endfor %}
     {% endfor %}
 
-    </head>
     <body>
         {% include 'global/nav.html.twig' %}
         {% block body %}{% endblock %}

@@ -16,16 +16,16 @@ class Lieu
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Rue = null;
+    private ?string $rue = null;
 
     #[ORM\Column]
-    private ?float $Latitude = null;
+    private ?float $latitude = null;
 
     #[ORM\Column]
-    private ?float $Longitude = null;
+    private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'lieu')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,6 +47,11 @@ class Lieu
         return $this->id;
     }
 
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
@@ -56,36 +61,36 @@ class Lieu
 
     public function getRue(): ?string
     {
-        return $this->Rue;
+        return $this->rue;
     }
 
-    public function setRue(string $Rue): static
+    public function setRue(string $rue): static
     {
-        $this->Rue = $Rue;
+        $this->rue = $rue;
 
         return $this;
     }
 
     public function getLatitude(): ?float
     {
-        return $this->Latitude;
+        return $this->latitude;
     }
 
-    public function setLatitude(float $Latitude): static
+    public function setLatitude(float $latitude): static
     {
-        $this->Latitude = $Latitude;
+        $this->latitude = $latitude;
 
         return $this;
     }
 
     public function getLongitude(): ?float
     {
-        return $this->Longitude;
+        return $this->longitude;
     }
 
-    public function setLongitude(float $Longitude): static
+    public function setLongitude(float $longitude): static
     {
-        $this->Longitude = $Longitude;
+        $this->longitude = $longitude;
 
         return $this;
     }

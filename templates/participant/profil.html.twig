@@ -25,8 +25,8 @@
             <span id="campus">{{ participant.campusAffilie.nom }}</span>
         </div>
     </div>
-    <button>Retour</button> {#<a href="javascript:history.back()">Retour</a> #}
-    <button>Modifier mon profil</button>
+    <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Retour</a>
+    <a href="{{ path('participant_modifierProfil', { 'id': participant.id }) }}" class="btn btn-secondary">Modifier mon profil</a>
 {% endblock %}
 
 
