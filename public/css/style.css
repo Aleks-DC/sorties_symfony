@@ -119,13 +119,31 @@ a:hover {
 
 
 /* Style du conteneur du formulaire */
-div {
+.participant-form {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: auto;
+}
+
+.image-placeholder {
+    width: 100px; /* Largeur du bloc carré */
+    height: 100px; /* Hauteur du bloc carré */
+    background-color: #e0e0e0; /* Couleur de fond pour le bloc */
+    margin-right: 20px; /* Espacement entre le bloc et les infos */
+    border: 1px solid #ccc; /* Bordure pour le bloc */
+}
+
+.participant-details-infos {
+    display: flex;
+    flex-direction: column;
+}
+
+.participant-details-infos div {
+    margin-bottom: 10px;
+    display: flex;
 }
 
 /* Style des labels */

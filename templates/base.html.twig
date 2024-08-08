@@ -21,6 +21,15 @@
         <h2>Ici est le header</h2>
     </header>
 
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <main>
         {% block body %}
             <h2>Ici se trouve le main</h2>
