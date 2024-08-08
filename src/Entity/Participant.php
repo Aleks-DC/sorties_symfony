@@ -6,23 +6,28 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-class Participant 
+#[UniqueEntity(fields: ['mail'], message: 'Ce mail est déjà utilisé.')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé.')]
+class Participant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 20)]
     #[Assert\Regex(
         pattern: '/^\+?[0-9]{7,15}$/',
         message: 'Le numéro de téléphone doit contenir entre 7 et 15 chiffres.'
@@ -30,6 +35,7 @@ class Participant
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     #[Assert\Email()]
     private ?string $mail = null;
 
@@ -42,7 +48,8 @@ class Participant
     #[ORM\Column]
     private ?bool $actif = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 25, unique:true)]
+    #[Assert\NotBlank]
     private ?string $pseudo = null;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
@@ -168,12 +175,12 @@ class Participant
         return $this;
     }
 
-    public function getCampus(): ?Campus
+    public function getCampusAffilie(): ?Campus
     {
         return $this->campusAffilie;
     }
 
-    public function setCampus(?Campus $campusAffilie): static
+    public function setCampusAffilie(?Campus $campusAffilie): static
     {
         $this->campusAffilie = $campusAffilie;
 
@@ -236,4 +243,5 @@ class Participant
 
         return $this;
     }
+
 }

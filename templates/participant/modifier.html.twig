@@ -1,11 +1,26 @@
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <div>
-        {{ form_start(serieForm) }}
-        {{ form_widget(serieForm) }}
-        <button>Modifier le profil</button>
-        {{ form_end(serieForm) }}
+    <h1>Modifier le profil</h1>
+    <div class="participant-form">
+        <h2>Informations participant</h2>
+        {{ form_start(participantForm) }}
+        {{ form_row(participantForm.nom) }}
+        {{ form_row(participantForm.prenom) }}
+        {{ form_row(participantForm.telephone) }}
+        {{ form_row(participantForm.mail) }}
+        {{ form_row(participantForm.campusAffilie) }}
     </div>
+    <div class="participant-form">
+        <h2>Informations de connexion</h2>
+        {{ form_row(participantForm.pseudo) }}
+        {{ form_row(participantForm.motDePasseActuel) }}
+        {{ form_row(participantForm.nouveauMotDePasse) }}
+        {{ form_row(participantForm.confirmationNouveauMotDePasse) }}
+    </div>
+    <button>Modifier la connexion</button>
+        {{ form_end(participantForm) }}
+
 {% endblock %}
 
 {% block title %}
