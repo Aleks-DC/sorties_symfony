@@ -9,9 +9,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticipantType extends AbstractType
 {
@@ -22,22 +24,22 @@ class ParticipantType extends AbstractType
         ->add('prenom', TextType::class)
         ->add('telephone', TextType::class)
         ->add('mail', EmailType::class)
-        ->add('motDePasse', TextType::class)
-        ->add('administrateur')
-        ->add('actif', ChoiceType::class, [
-            'choices' => ['Oui', 'Non'],
-            'choices_label' => ['Oui', 'Non'],
-        ])
-
-        ->add('pseudo', TextType::class)
         ->add('campusAffilie', EntityType::class, [
             'class' => Campus::class,
             'choice_label' => 'nom',
         ])
-        ->add('sortiesPrevues', EntityType::class, [
-            'class' => Sortie::class,
-            'choice_label' => 'nom',
-            'multiple' => true,
+        ->add('motDePasseActuel', PasswordType::class, [
+            'mapped' => false,
+            'required' => false,
+        ])
+        ->add('pseudo', TextType::class)
+        ->add('nouveauMotDePasse', PasswordType::class, [
+            'mapped' => false,
+            'required' => false,
+        ])
+        ->add('confirmationNouveauMotDePasse', PasswordType::class, [
+            'mapped' => false,
+            'required' => false,
         ])
         ;
     }

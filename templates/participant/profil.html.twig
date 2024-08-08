@@ -1,15 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="image-placeholder">#photo</div>
     <div class="participant-details-infos">
         <h2>{{ participant.pseudo }}</h2>
-        <div>{{ participant.nom }} {{ participant.prenom }}</div>
-        <div>Télephone: {{ participant.telephone }}</div>
-        <div>Email: {{ participant.mail }}</div>
+        <div>
+            <label for="nom">Nom:</label>
+            <span id="nom">{{ participant.nom }}</span>
+        </div>
+        <div>
+            <label for="prenom">Prénom:</label>
+            <span id="prenom">{{ participant.prenom }}</span>
+        </div>
+        <div>
+            <label for="telephone">Téléphone:</label>
+            <span id="telephone">{{ participant.telephone }}</span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <span id="email">{{ participant.mail }}</span>
+        </div>
+        <div>
+            <label for="campus">Campus:</label>
+            <span id="campus">{{ participant.campusAffilie.nom }}</span>
+        </div>
     </div>
+    <button>Retour</button> {#<a href="javascript:history.back()">Retour</a> #}
+    <button>Modifier mon profil</button>
 {% endblock %}
 
 
 {% block title %}
-    Mon profil | {{ parent() }}
+    Profil de XXXXXX | {{ parent() }}
 {% endblock %}
