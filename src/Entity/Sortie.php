@@ -24,7 +24,7 @@ class Sortie
     private ?DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?DateTimeInterface $Duree = null;
+    private ?DateTimeInterface $duree = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?DateTimeInterface $dateLimiteInscription = null;
@@ -41,7 +41,7 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Lieu $lieux = null;
+    private ?Lieu $lieu = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
@@ -96,12 +96,12 @@ class Sortie
 
     public function getDuree(): ?DateTimeInterface
     {
-        return $this->Duree;
+        return $this->duree;
     }
 
-    public function setDuree(DateTimeInterface $Duree): static
+    public function setDuree(DateTimeInterface $duree): static
     {
-        $this->Duree = $Duree;
+        $this->duree = $duree;
 
         return $this;
     }
@@ -165,14 +165,14 @@ class Sortie
         return $this->motifAnnulation;
     }
 
-    public function getLieux(): ?Lieu
+    public function getLieu(): ?Lieu
     {
-        return $this->lieux;
+        return $this->lieu;
     }
 
-    public function setLieux(?Lieu $lieux): static
+    public function setLieu(?Lieu $lieu): static
     {
-        $this->lieux = $lieux;
+        $this->lieu = $lieu;
 
         return $this;
     }

@@ -65,7 +65,7 @@ class Etat
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
-            $sorties->setEtats($this);
+            $sorties->setEtat($this);
         }
 
         return $this;
@@ -75,8 +75,8 @@ class Etat
     {
         if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorties->getEtats() === $this) {
-                $sorties->setEtats(null);
+            if ($sorties->getEtat() === $this) {
+                $sorties->setEtat(null);
             }
         }
 
