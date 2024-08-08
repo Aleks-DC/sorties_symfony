@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+    <div class="text-center">
+        <p>Date du jour: {{ date }}</p>
+        <p>Participants: {{ participants }}</p>
+    </div>
+</div>
+
+{# <form action="{{ path('search') }}" method="GET"> #}
+    <div class="container">
+        <div class="text-center">
+            <p>Filter les sorties</p>
+            {% for unCampus in campus %}
+                {{ unCampus.nom }}
+            {% endfor %}
+            <p><input type="checkbox" name="organisateur"> Sorties dont je suis l'organisateur</p>
+            <p><input type="checkbox" name="inscrit"> Sorties auxquelles je suis inscrit</p>
+            <p><input type="checkbox" name="non_inscrit"> Sorties auxquelles je ne suis pas inscrit</p>
+            <p><input type="checkbox" name="passees"> Sorties passées</p>
+            <button type="submit" class="btn btn-primary">Recherche</button>
+        </div>
+    </div>
+</form>
+
+{% for sortie in sorties %}
+    <div class="card sortie-carte">
+        <div class="card-body">
+            <h5 class="card-title">{{ sortie.nom }}</h5>
+            <p class="card-text">Date de début: {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
+            <p class="card-text">Date limite d'inscription: {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
+            <p class="card-text">Nombre maximum d'inscriptions: {{ sortie.nbInscriptionsMax }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+<button type="submit" class="btn btn-primary">Créer une sortie</button>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+{% endblock %}
