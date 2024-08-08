@@ -1,26 +1,33 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Modifier le profil</h1>
-    <div class="participant-form">
-        <h2>Informations participant</h2>
-        {{ form_start(participantForm) }}
-        {{ form_row(participantForm.nom) }}
-        {{ form_row(participantForm.prenom) }}
-        {{ form_row(participantForm.telephone) }}
-        {{ form_row(participantForm.mail) }}
-        {{ form_row(participantForm.campusAffilie) }}
+    <div class="container my-5">
+        <h1 class="display-4 text-center">Modifier le profil</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="participant-form mb-5">
+                    <h2 class="h4">Informations participant</h2>
+                    {{ form_start(participantForm, {'attr': {'class': 'form'}}) }}
+                    {{ form_row(participantForm.nom, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.prenom, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.telephone, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.mail, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.campusAffilie, {'attr': {'class': 'form-control mb-3'}}) }}
+                </div>
+                <div class="participant-form mb-5">
+                    <h2 class="h4">Informations de connexion</h2>
+                    {{ form_row(participantForm.pseudo, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.motDePasseActuel, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.nouveauMotDePasse, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.confirmationNouveauMotDePasse, {'attr': {'class': 'form-control mb-3'}}) }}
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary">Modifier la connexion</button>
+                </div>
+                {{ form_end(participantForm) }}
+            </div>
+        </div>
     </div>
-    <div class="participant-form">
-        <h2>Informations de connexion</h2>
-        {{ form_row(participantForm.pseudo) }}
-        {{ form_row(participantForm.motDePasseActuel) }}
-        {{ form_row(participantForm.nouveauMotDePasse) }}
-        {{ form_row(participantForm.confirmationNouveauMotDePasse) }}
-    </div>
-    <button>Modifier la connexion</button>
-        {{ form_end(participantForm) }}
-
 {% endblock %}
 
 {% block title %}
