@@ -22,13 +22,13 @@ class Campus
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'campus')]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'siteOrganisateur')]
     private Collection $sorties;
 
     /**
      * @var Collection<int, Participant>
      */
-    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'campus')]
+    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'campusAffilie')]
     private Collection $participants;
 
     public function __construct()
@@ -66,7 +66,7 @@ class Campus
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
-            $sorties->setCampus($this);
+            $sorties->setSiteOrganisateur($this);
         }
 
         return $this;
@@ -76,8 +76,8 @@ class Campus
     {
         if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorties->getCampus() === $this) {
-                $sorties->setCampus(null);
+            if ($sorties->getSiteOrganisateur() === $this) {
+                $sorties->setSiteOrganisateur(null);
             }
         }
 
@@ -96,7 +96,7 @@ class Campus
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
-            $participant->setCampus($this);
+            $participant->setCampusAffilie($this);
         }
 
         return $this;
@@ -106,8 +106,8 @@ class Campus
     {
         if ($this->participants->removeElement($participant)) {
             // set the owning side to null (unless already changed)
-            if ($participant->getCampus() === $this) {
-                $participant->setCampus(null);
+            if ($participant->getCampusAffilie() === $this) {
+                $participant->setCampusAffilie(null);
             }
         }
 
