@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
@@ -36,7 +34,7 @@ class Participant
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Email()]
+    #[Assert\Email]
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
@@ -59,7 +57,7 @@ class Participant
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'participant')]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
     private Collection $sortiesOrganisees;
 
     /**
@@ -199,7 +197,7 @@ class Participant
     {
         if (!$this->sortiesOrganisees->contains($sorties)) {
             $this->sortiesOrganisees->add($sorties);
-            $sorties->setParticipant($this);
+            $sorties->setOrganisateur($this);
         }
 
         return $this;
@@ -209,8 +207,8 @@ class Participant
     {
         if ($this->sortiesOrganisees->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorties->getParticipant() === $this) {
-                $sorties->setParticipant(null);
+            if ($sorties->getOrganisateur() === $this) {
+                $sorties->setOrganisateur(null);
             }
         }
 

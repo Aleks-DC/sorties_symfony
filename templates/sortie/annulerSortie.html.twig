@@ -9,7 +9,7 @@
         <p><strong>Nom de la sortie :</strong> {{ sortie.nom }}</p>
         <p><strong>Date de la sortie :</strong> {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
         <p><strong>Campus :</strong> {{ sortie.siteOrganisateur.nom }}</p>
-        <p><strong>Lieu :</strong> {{ sortie.lieux.nom }}</p>
+        <p><strong>Lieu :</strong> {{ sortie.lieu.nom }}</p>
     </div>
 
     {{ form_start(form) }}
