@@ -121,12 +121,27 @@ class AppFixtures extends Fixture
             $lieu->setLatitude($faker->latitude);
             $lieu->setLongitude($faker->longitude);
             $manager->persist($lieu);
+            $manager->flush();
 
             // Lieu aléatoire
-            $sortie->setLieu($manager->find(Lieu::class, rand(1, 5)));
-        
+            $lieu = $manager->getRepository(Lieu::class)->findOneBy([]);
+                if (!$lieu) {
+                    throw new \Exception('Aucun lieu trouvé');
+                }
+            $sortie->setLieu($lieu);
+
             // Organisateur aléatoire
-            $sortie->setOrganisateur($manager->find(Participant::class, rand(1, 10)));
+            $organisateur = $manager->getRepository(Participant::class)->findOneBy([]);
+            if (!$organisateur) {
+                throw new \Exception('Aucun participant trouvé');
+            }
+            $sortie->setOrganisateur($organisateur);
+
+            $campus = $manager->getRepository(Campus::class)->findOneBy([]);
+            if (!$campus) {
+                throw new \Exception('Aucune instance de Campus trouvée');
+            }
+            $sortie->setSiteOrganisateur($campus);
         
             // Etat aléatoire (sauf "Passée")
             $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
