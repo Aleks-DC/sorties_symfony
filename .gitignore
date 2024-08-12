@@ -8,7 +8,7 @@
 /vendor/
 /.idea/
 ###< symfony/framework-bundle ###
-.env
+
 node_modules/
 
 ###> phpunit/phpunit ###

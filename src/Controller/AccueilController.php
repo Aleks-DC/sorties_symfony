@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController
 {
-    #[Route('/accueil', name: 'app_accueil')]
+    #[Route('/', name: 'app_accueil')]
     public function index(ParticipantRepository $participantRepository, SortieRepository $sortieRepository, CampusRepository $campusRepository): Response
     {
         $date = new DateTime();
