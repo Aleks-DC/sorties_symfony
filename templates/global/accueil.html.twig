@@ -25,7 +25,7 @@
                 <input type="date" name="dateFin" id="dateFin" class="form-control">
 
             </div>
-        <div class="accueilTab2">    
+        <div class="accueilTab2">
             <p><input type="checkbox" name="organisateur"> Sorties dont je suis l'organisateur</p>
             <p><input type="checkbox" name="inscrit"> Sorties auxquelles je suis inscrit</p>
             <p><input type="checkbox" name="non_inscrit"> Sorties auxquelles je ne suis pas inscrit</p>
@@ -36,25 +36,35 @@
         </div>
     </div>
 
-<div class="card-container">
-{% for sortie in sorties %}
-    <div class="card sortie-carte">
-        <div class="card-body">
-            <h5 class="card-title">{{ sortie.nom }}</h5>
-            <p class="card-text">Date de début: {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
-            <p class="card-text">Date limite d'inscription: {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
-            <p class="card-text">Nombre maximum d'inscriptions: {{ sortie.nbInscriptionsMax }}</p>
-            <p class="card-text">Etat: {{ sortie.etat.libelle }}</p>
-
-            {% if sortie.etat.libelle == 'créée' or sortie.etat.libelle == 'ouverte' %}
-                <a href="{{ path('sortie_annulation', { 'id': sortie.id }) }}"
-                   type="submit" class="btn btn-primary">Annuler une sortie</a>
-            {% endif %}
-
-        </div>
-    </div>
-{% endfor %}
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Date de début</th>
+            <th>Date limite d'inscription</th>
+            <th>Nombre maximum d'inscriptions</th>
+            <th>Etat</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sortie in sorties %}
+            <tr>
+                <td>{{ sortie.nom }}</td>
+                <td>{{ sortie.dateHeureDebut|date('d/m/Y') }}</td>
+                <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                <td>{{ sortie.nbInscriptionsMax }}</td>
+                <td>{{ sortie.etat.libelle }}</td>
+                <td>
+                    {% if sortie.etat.libelle == 'créée' or sortie.etat.libelle == 'ouverte' %}
+                        <a href="{{ path('sortie_annulation', { 'id': sortie.id }) }}"
+                           type="submit" class="btn btn-primary">Annuler une sortie</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 <button type="submit" class="btn btn-primary">Créer une sortie</button>
 

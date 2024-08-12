@@ -95,12 +95,14 @@ class AppFixtures extends Fixture
             $sortie->setInfosSortie($faker->paragraph);
         
             // Date et heure de début aléatoire
-            $startDate = $faker->dateTimeBetween('-1 week');
+            $startDate = $faker->dateTimeBetween('+2 week');
             $sortie->setDateHeureDebut($startDate);
         
             // Durée aléatoire entre 1 et 5 heures
             $duration = $faker->numberBetween(1, 5);
-            $endDate = $startDate->modify('+'.$duration.' hours');
+            $endDate = clone $startDate;
+            $endDate->modify("+{$duration} hours");
+            $endDate->modify("+1 day");
             $sortie->setDuree($endDate);
         
             // Date limite d'inscription aléatoire avant la date de début
@@ -144,9 +146,15 @@ class AppFixtures extends Fixture
             $sortie->setSiteOrganisateur($campus);
         
             // Etat aléatoire (sauf "Passée")
-            $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
-            if (!$etat) {
-                $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+            $etat = null;
+            $currentDate = new \DateTime();
+            if ($currentDate < $sortie->getDateHeureDebut()) {
+                $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
+                if (!$etat) {
+                    $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+                }
+            } else {
+                $etat = $manager->getRepository(Etat::class)->findOneBy(['libelle' => 'Clôturée']);
             }
             $sortie->setEtat($etat);
         
