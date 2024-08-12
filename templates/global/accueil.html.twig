@@ -2,29 +2,41 @@
 
 {% block body %}
 
-<div class="container">
-    <div class="text-center">
-        <p>Date du jour: {{ date }}</p>
-        <p>Participants: {{ participants }}</p>
+    <div class="text-center connectedUserAccueil">
+        <p><b>Date du jour: {{ date }}</p>
+        <p>Participants: {{ participants }}</b></p>
     </div>
-</div>
 
-{# <form action="{{ path('search') }}" method="GET"> #}
-    <div class="container">
-        <div class="text-center">
-            <p>Filter les sorties</p>
-            {% for unCampus in campus %}
-                {{ unCampus.nom }}
-            {% endfor %}
+        <div class="text-center accueilTab">
+            <div class="accueilTab1">
+                <p><b>Filter les sorties</b></p>
+                <label for="campus">Campus:</label>
+                <select name="campus" id="campus" class="form-control">
+                
+                {% for unCampus in campus %}
+                    <option>{{ unCampus.nom }}</option>
+                {% endfor %}
+                </select>
+                <label for="search">Recherche par mot clé :</label>
+                <input type="text" name="search" placeholder="Rechercher..." class="form-control">
+                <label for="dateDebut">Entre:</label>
+                <input type="date" name="dateDebut" id="dateDebut" class="form-control">
+                <label for="dateFin">et:</label>
+                <input type="date" name="dateFin" id="dateFin" class="form-control">
+
+            </div>
+        <div class="accueilTab2">    
             <p><input type="checkbox" name="organisateur"> Sorties dont je suis l'organisateur</p>
             <p><input type="checkbox" name="inscrit"> Sorties auxquelles je suis inscrit</p>
             <p><input type="checkbox" name="non_inscrit"> Sorties auxquelles je ne suis pas inscrit</p>
             <p><input type="checkbox" name="passees"> Sorties passées</p>
+        </div>
+        <div class="accueilTab3">    
             <button type="submit" class="btn btn-primary">Recherche</button>
         </div>
     </div>
-</form>
 
+<div class="card-container">
 {% for sortie in sorties %}
     <div class="card sortie-carte">
         <div class="card-body">
@@ -35,6 +47,7 @@
         </div>
     </div>
 {% endfor %}
+</div>
 
 <button type="submit" class="btn btn-primary">Créer une sortie</button>
 
