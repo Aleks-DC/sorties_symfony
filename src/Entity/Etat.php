@@ -10,7 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
 class Etat
 {
-    const ETATS = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'];
+    const ETAT_CREEE = 'Créée';
+    const ETAT_OUVERTE = 'Ouverte';
+    const ETAT_CLOTUREE = 'Clôturée';
+    const ETAT_EN_COURS = 'Activité en cours';
+    const ETAT_PASSEE = 'Passée';
+    const ETAT_ANNULEE = 'Annulée';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,12 +23,12 @@ class Etat
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Libelle = null;
+    private ?string $libelle = null;
 
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etats')]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etat')]
     private Collection $sorties;
 
     public function __construct()
@@ -38,12 +43,12 @@ class Etat
 
     public function getLibelle(): ?string
     {
-        return $this->Libelle;
+        return $this->libelle;
     }
 
-    public function setLibelle(string $Libelle): static
+    public function setLibelle(string $libelle): static
     {
-        $this->Libelle = $Libelle;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -60,7 +65,7 @@ class Etat
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
-            $sorties->setEtats($this);
+            $sorties->setEtat($this);
         }
 
         return $this;
@@ -70,8 +75,8 @@ class Etat
     {
         if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorties->getEtats() === $this) {
-                $sorties->setEtats(null);
+            if ($sorties->getEtat() === $this) {
+                $sorties->setEtat(null);
             }
         }
 
