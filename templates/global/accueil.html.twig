@@ -44,6 +44,13 @@
             <p class="card-text">Date de début: {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
             <p class="card-text">Date limite d'inscription: {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
             <p class="card-text">Nombre maximum d'inscriptions: {{ sortie.nbInscriptionsMax }}</p>
+            <p class="card-text">Etat: {{ sortie.etat.libelle }}</p>
+
+            {% if sortie.etat.libelle == 'créée' or sortie.etat.libelle == 'ouverte' %}
+                <a href="{{ path('sortie_annulation', { 'id': sortie.id }) }}"
+                   type="submit" class="btn btn-primary">Annuler une sortie</a>
+            {% endif %}
+
         </div>
     </div>
 {% endfor %}

@@ -27,7 +27,7 @@ class SortieController extends AbstractController
         //Annulation impossible si la sortie a eu lieu
         if ($sortie->getDateHeureDebut() <= new DateTime()) {
             $this->addFlash('error', 'La sortie a déjà eu lieu et ne peut pas être annulée.');
-            return $this->redirectToRoute('sortie_detail', ['id' => $id]);
+            return $this->redirectToRoute('sortie_annulation', ['id' => $id]);
         }
 
         $annulerSortieForm = $this-> createForm(AnnulerSortieType::class, $sortie);
