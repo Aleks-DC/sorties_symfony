@@ -19,7 +19,7 @@ security:
       logout:
         path: app_logout
         # where to redirect after logout
-        # target: app_any_route
+        target: app_accueil
         # where to redirect after logout
         # target: app_any_route
 
@@ -27,6 +27,7 @@ security:
         secret: "%kernel.secret%"
         lifetime: 604800
         path: /
+
       form_login:
         login_path: app_login
         check_path: app_login
