@@ -44,9 +44,8 @@ class SortieCreationType extends AbstractType
                 'label' => 'Durée',
                 'attr' => ['min' => 1]
             ])
-            ->add('infosSortie', TextType::class, [
-                'label' => 'Description et infos',
-                'attr' => ['class' => 'tinymce']
+            ->add('infosSortie', TextareaType::class, [
+                'label' => 'Description et infos'
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
