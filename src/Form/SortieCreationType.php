@@ -10,6 +10,7 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -40,7 +41,7 @@ class SortieCreationType extends AbstractType
                 'attr' => ['min' => 1]
             ])
             ->add('duree', IntegerType::class, [
-                'label' => 'Durée (minutes)',
+                'label' => 'Durée',
                 'attr' => ['min' => 1]
             ])
             ->add('infosSortie', TextType::class, [
@@ -56,6 +57,24 @@ class SortieCreationType extends AbstractType
                 'class' => Campus::class,
                 'choice_label' => 'nom',
                 'label' => 'Campus'
+            ])
+            ->add('enregistrer', SubmitType::class, [
+                'label' => 'Enregistrer',
+                'attr' => ['class' => 'btn btn-primary']
+            ])
+            ->add('publier', SubmitType::class, [
+                'label' => 'Publier la sortie',
+                'attr' => ['class' => 'btn btn-success']
+            ])
+            ->add('annuler', ButtonType::class, [
+                'label' => 'Annuler',
+                'attr' => ['class' => 'btn btn-secondary', 'onclick' => 'window.location.href="/";']
             ]);
+    }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Sortie::class,
+        ]);
     }
 }

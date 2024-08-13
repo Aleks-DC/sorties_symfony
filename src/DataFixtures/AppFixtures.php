@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
         }
 
         // Création des campus
-        $campusNames = ['Nante', 'Renne', 'Quimper', 'Niort'];
+        $campusNames = ['Nantes', 'Rennes', 'Quimper', 'Niort'];
 
         foreach ($campusNames as $campusName) {
             $campus = new Campus();
@@ -95,7 +95,7 @@ class AppFixtures extends Fixture
             $sortie->setInfosSortie($faker->paragraph);
         
             // Date et heure de début aléatoire
-            $startDate = $faker->dateTimeBetween('+2 week');
+            $startDate = $faker->dateTimeBetween('+0 week');
             $sortie->setDateHeureDebut($startDate);
         
             // Durée aléatoire entre 1 et 5 heures
