@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création sortie{% endblock %}
+
+{% block body %}
+    <style>
+        label.required:before {
+            content: "* ";
+        }
+    </style>
+
+    <section id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-4">Créer une sortie</h1>
+                    <span class="text-muted"><small>*: champ requis</small></span>
+                    {{ form(creationSortieForm) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
