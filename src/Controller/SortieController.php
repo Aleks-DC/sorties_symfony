@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/sortie', name: 'app_sortie_')]
 class SortieController extends AbstractController
 {
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Route('/details/{id}', name: 'details', methods: ['GET'])]
     public function afficherSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
     {
         //Récupérer la sortie
@@ -25,11 +25,11 @@ class SortieController extends AbstractController
         if (!$sortie) {
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
-        return $this->render('sortie/show.html.twig', [
+        return $this->render('sortie/details.html.twig', [
             'sortie' => $sortie,
         ]);
     }
-    #[Route('/modifier/{id}', name: 'modifier')]
+    #[Route('/modif/{id}', name: 'modif')]
     public function modifierSortie(EntityManagerInterface $entityManager, int $id, Request $request, Security $security): Response
     {
         // Récupération de la sortie à modifier
