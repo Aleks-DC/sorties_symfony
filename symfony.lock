@@ -233,7 +233,7 @@
         ]
     },
     "symfony/stimulus-bundle": {
-        "version": "2.18",
+        "version": "2.19",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",

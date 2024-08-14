@@ -44,6 +44,7 @@
             <th>Date limite d'inscription</th>
             <th>Nombre maximum d'inscriptions</th>
             <th>Etat</th>
+            <th>Organisateur</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -56,9 +57,20 @@
                 <td>{{ sortie.nbInscriptionsMax }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>
-                    {% if sortie.etat.libelle == 'créée' or sortie.etat.libelle == 'ouverte' %}
+                    <a href="{{ path('participant_profil', { 'sortieId': sortie.id }) }}">
+                        {{ sortie.organisateur.pseudo }}
+                    </a>
+                </td>
+                <td>
+                    {% if sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' %}
                         <a href="{{ path('sortie_annulation', { 'id': sortie.id }) }}"
-                           type="submit" class="btn btn-primary">Annuler une sortie</a>
+                           type="submit">Annuler</a>
+                    {% endif %}
+                    <p> - </p>
+                    {% if sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' %}
+                        {% if app.user is not null and app.user.estInscrit(sortie) %}
+                            <a href="{{ path('sortie_desistement', { 'id': sortie.id }) }}">Se désister</a>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>

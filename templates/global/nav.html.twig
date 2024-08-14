@@ -1,6 +1,6 @@
     {% block body %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ path('app_accueil') }}">
+    <a class="navbar-brand" href="/Sortie-ENI/public">
         <img src="{{ asset('images/sortir.png') }}" alt="Logo de votre application" width="300" height="150" class="d-inline-block align-top">    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,9 +16,11 @@
         <li class="nav-item">
             <a class="nav-link" href="#">Campus</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Sortie-ENI/public/participant/modifierProfil/{id}">Mon profil</a>
-        </li>
+        {% if app.user %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('participant_modifierProfil', {'id': app.user.id}) }}">Modifier mon profil</a>
+            </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link" href="/logout">Se déconnecter</a>
         </li>

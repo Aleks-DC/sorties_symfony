@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields: ['mail'], message: 'Ce mail est déjà utilisé.')]
 #[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé.')]
-class Participant implements UserInterface, PasswordAuthenticatedUserInterface
+class Participant implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -270,5 +270,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
+    public function estInscrit(Sortie $sortie): bool
+    {
+        return $this->sortiesPrevues->contains($sortie);
+    }
 }
