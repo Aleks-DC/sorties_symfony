@@ -1,5 +1,19 @@
 {
+  "name": "sortie-eni",
+  "version": "1.0.0",
+  "description": "Description de votre projet",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^4.6.1",
+    "webpack": "^5.x",
+    "webpack-cli": "^4.x",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-notifier": "^1.6.0"
+  },
   "dependencies": {
     "bootstrap": "^5.3.3"
+  },
+  "scripts": {
+    "dev": "encore dev --watch",
+    "build": "encore production"
   }
 }

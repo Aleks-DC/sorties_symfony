@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\AnnulerSortieType;
 use DateTime;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SortieController extends AbstractController
 {
     #[Route('/annuler/{id}', name: 'annulation')]
-    public function annulerSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
+    public function annulerSortie(Request $request, EntityManagerInterface $entityManager, int $id ): Response
     {
         //Récupérer la sortie
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
@@ -24,16 +25,26 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
 
-        //Annulation impossible si la sortie a eu lieu
-        if ($sortie->getDateHeureDebut() <= new DateTime()) {
-            $this->addFlash('error', 'La sortie a déjà eu lieu et ne peut pas être annulée.');
-            return $this->redirectToRoute('sortie_annulation', ['id' => $id]);
+        $currentUser = $this->getUser();
+        if (!$currentUser instanceof Participant || $currentUser->getId() !== $sortie->getOrganisateur()->getId()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à annuler cette sortie.');
+        }
+
+        $etatActuel = $sortie->getEtat()->getLibelle();
+        if ($etatActuel !== Etat::ETAT_CREEE && $etatActuel !== Etat::ETAT_OUVERTE) {
+            $this->addFlash('error', 'La sortie ne peut pas être annulée.');
+            return $this->redirectToRoute('app_accueil');
         }
 
         $annulerSortieForm = $this-> createForm(AnnulerSortieType::class, $sortie);
         $annulerSortieForm->handleRequest($request);
 
         if ($annulerSortieForm->isSubmitted() && $annulerSortieForm->isValid()) {
+
+            if ($sortie->getDateHeureDebut() <= new DateTime()) {
+                $this->addFlash('error', 'La sortie a déjà eu lieu et ne peut pas être annulée.');
+                return $this->redirectToRoute('app_accueil');
+            }
 
             // Récupérer l'Etat "Annulée"
             $etatAnnulee = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => Etat::ETAT_ANNULEE]);
@@ -56,5 +67,31 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'form' => $annulerSortieForm->createView(),
         ]);
+    }
+
+    #[Route('/desister/{id}', name: 'desistement')]
+    public function desister(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $participant = $this->getUser();
+
+        if ($participant instanceof Participant && $participant->estInscrit($sortie))  {
+            if ($sortie->getDateHeureDebut() > new DateTime()) {
+                $participant->removeSortiesPrevue($sortie);
+                $entityManager->flush();
+
+                 $this->addFlash('success', 'Vous vous êtes désisté avec succès.');
+            } else {
+                $this->addFlash('error', 'La date de cette sortie est déjà passée. Vous ne pouvez plus vous désister.');
+            }
+        } else {
+            $this->addFlash('error', 'Vous n\'êtes pas inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('app_accueil', ['id' => $id]);
     }
 }
