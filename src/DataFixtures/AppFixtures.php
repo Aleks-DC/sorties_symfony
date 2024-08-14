@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
         }
 
         // Création des campus
-        $campusNames = ['Nante', 'Renne', 'Quimper', 'Niort'];
+        $campusNames = ['Nantes', 'Rennes', 'Quimper', 'Niort'];
 
         foreach ($campusNames as $campusName) {
             $campus = new Campus();
