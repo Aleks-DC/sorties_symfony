@@ -5,16 +5,92 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\AnnulerSortieType;
+use App\Form\SortieCreationType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sortie', name: 'sortie_')]
+#[Route('/sortie', name: 'app_sortie_')]
 class SortieController extends AbstractController
 {
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function afficherSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
+    {
+        //Récupérer la sortie
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+        return $this->render('sortie/show.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
+    #[Route('/modifier/{id}', name: 'modifier')]
+    public function modifierSortie(EntityManagerInterface $entityManager, int $id, Request $request, Security $security): Response
+    {
+        // Récupération de la sortie à modifier
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        // Vérification si la sortie existe
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
+        // Vérification si l'utilisateur est bien l'organisateur de la sortie
+        $currentUser = $security->getUser();
+        if ($sortie->getOrganisateur() !== $currentUser) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas l\'organisateur de cette sortie');
+        }
+
+        // Création du formulaire en utilisant la sortie récupérée
+        $form = $this->createForm(SortieCreationType::class, $sortie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Vérification des actions du formulaire
+            if ($form->get('enregistrer')->isClicked()) {
+                return $this->handleSortieAction($sortie, $entityManager, 'enregistrer');
+            } elseif ($form->get('publier')->isClicked()) {
+                return $this->handleSortieAction($sortie, $entityManager, 'publier');
+            }
+        }
+
+        // Rendu du formulaire de modification
+        return $this->render('sortie/modif.html.twig', [
+            'sortieCreationForm' => $form->createView()
+        ]);
+    }
+
+    private function handleSortieAction(Sortie $sortie, EntityManagerInterface $entityManager, string $action): Response
+    {
+        $etatRepository = $entityManager->getRepository(Etat::class);
+
+        if ($action === 'publier') {
+            $etat = $etatRepository->findOneBy(['libelle' => Etat::ETAT_OUVERTE]);
+            $message = 'Sortie publiée avec succès.';
+            $redirectRoute = 'app_accueil';
+        } else {
+            $etat = $etatRepository->findOneBy(['libelle' => Etat::ETAT_CREEE]);
+            $message = 'Sortie modifiée et enregistrée avec succès.';
+            $redirectRoute = 'app_sortie_modification';
+        }
+
+        if ($etat) {
+            $sortie->setEtat($etat);
+        }
+
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        $this->addFlash('success', $message);
+
+        return $this->redirectToRoute($redirectRoute, ['id' => $sortie->getId()]);
+    }
     #[Route('/annuler/{id}', name: 'annulation')]
     public function annulerSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
     {
