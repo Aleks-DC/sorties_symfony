@@ -14,23 +14,37 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 #[Route('/sortie', name: 'app_sortie_')]
 class SortieController extends AbstractController
 {
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    use TargetPathTrait; // Assure-toi que ce trait est bien inclus
+    #[Route('/details/{id}', name: 'details', methods: ['GET'])]
     public function afficherSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
     {
+        // Vérifie si l'utilisateur est connecté
+        if (!$this->getUser()) {
+            // Génère l'URL complète pour la page de détails avec l'ID spécifique
+            $targetUrl = $this->generateUrl('app_sortie_details', ['id' => $id]);
+
+            // Sauvegarde l'URL actuelle (la page de détails avec l'ID) avant redirection
+            $this->saveTargetPath($request->getSession(), 'main', $targetUrl);
+
+            // Redirige vers la page de login
+            return $this->redirectToRoute('app_login');
+        }
+
         //Récupérer la sortie
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         if (!$sortie) {
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
-        return $this->render('sortie/show.html.twig', [
+        return $this->render('sortie/details.html.twig', [
             'sortie' => $sortie,
         ]);
     }
-    #[Route('/modifier/{id}', name: 'modifier')]
+    #[Route('/modif/{id}', name: 'modif')]
     public function modifierSortie(EntityManagerInterface $entityManager, int $id, Request $request, Security $security): Response
     {
         // Récupération de la sortie à modifier
@@ -78,7 +92,7 @@ class SortieController extends AbstractController
         } else {
             $etat = $etatRepository->findOneBy(['libelle' => Etat::ETAT_CREEE]);
             $message = 'Sortie modifiée et enregistrée avec succès.';
-            $redirectRoute = 'app_sortie_modification';
+            $redirectRoute = 'app_accueil';
         }
 
         if ($etat) {

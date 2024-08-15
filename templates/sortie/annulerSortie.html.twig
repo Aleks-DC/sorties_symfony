@@ -3,42 +3,55 @@
 {% block title %}Annuler la sortie{% endblock %}
 
 {% block body %}
-    <h1>
-        {% if sortie.motifAnnulation %}
-            Sortie annulée - Détails
-        {% else %}
-            Annuler la sortie
-        {% endif %}
-    </h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h1 class="h4 text-center">
+                            {% if sortie.motifAnnulation %}
+                                Sortie annulée - Détails
+                            {% else %}
+                                Annuler la sortie
+                            {% endif %}
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="sortie-details mb-4">
+                            <p><strong>Nom de la sortie :</strong> {{ sortie.nom }}</p>
+                            <p><strong>Date de la sortie :</strong> {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
+                            <p><strong>Campus :</strong> {{ sortie.siteOrganisateur.nom }}</p>
+                            <p><strong>Lieu :</strong> {{ sortie.lieu.nom }}</p>
 
-    <div class="sortie-details">
-        <p><strong>Nom de la sortie :</strong> {{ sortie.nom }}</p>
-        <p><strong>Date de la sortie :</strong> {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
-        <p><strong>Campus :</strong> {{ sortie.siteOrganisateur.nom }}</p>
-        <p><strong>Lieu :</strong> {{ sortie.lieu.nom }}</p>
+                            {% if sortie.motifAnnulation %}
+                                <div class="alert alert-warning">
+                                    Cette sortie a déjà été annulée.
+                                </div>
+                                <p><strong>Motif d'annulation :</strong> {{ sortie.motifAnnulation }}</p>
+                            {% endif %}
+                        </div>
 
-        {% if sortie.motifAnnulation %}
-            <div class="alert alert-warning">
-                Cette sortie a déjà été annulée.
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{ form_label(form.motifAnnulation, sortie.motifAnnulation ? 'Modifier le motif' : 'Motif d\'annulation', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.motifAnnulation, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.motifAnnulation) }}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                {% if sortie.motifAnnulation %}
+                                    Modifier le motif d'annulation
+                                {% else %}
+                                    Enregistrer l'annulation
+                                {% endif %}
+                            </button>
+                            <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Annuler</a>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
-            <p><strong>Motif d'annulation :</strong> {{ sortie.motifAnnulation }}</p>
-        {% endif %}
+        </div>
     </div>
-
-    {{ form_start(form) }}
-    <div class="form-group">
-        {{ form_label(form.motifAnnulation, sortie.motifAnnulation ? 'Modifier le motif' : 'Motif d\'annulation') }}
-        {{ form_widget(form.motifAnnulation) }}
-        {{ form_errors(form.motifAnnulation) }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        {% if sortie.motifAnnulation %}
-            Modifier le motif d'annulation
-        {% else %}
-            Enregistrer l'annulation
-        {% endif %}
-    </button>
-    <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Annuler</a>
-    {{ form_end(form) }}
 {% endblock %}
