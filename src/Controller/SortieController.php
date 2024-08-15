@@ -13,13 +13,27 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 #[Route('/sortie', name: 'app_sortie_')]
 class SortieController extends AbstractController
 {
+    use TargetPathTrait; // Assure-toi que ce trait est bien inclus
     #[Route('/details/{id}', name: 'details', methods: ['GET'])]
     public function afficherSortie(EntityManagerInterface $entityManager, int $id, Request $request): Response
     {
+        // Vérifie si l'utilisateur est connecté
+        if (!$this->getUser()) {
+            // Génère l'URL complète pour la page de détails avec l'ID spécifique
+            $targetUrl = $this->generateUrl('app_sortie_details', ['id' => $id]);
+
+            // Sauvegarde l'URL actuelle (la page de détails avec l'ID) avant redirection
+            $this->saveTargetPath($request->getSession(), 'main', $targetUrl);
+
+            // Redirige vers la page de login
+            return $this->redirectToRoute('app_login');
+        }
+
         //Récupérer la sortie
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         if (!$sortie) {

@@ -94,6 +94,18 @@
                     <div class="row">
                         <div class="col text-center mt-4">
                             <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Retour à la liste</a>
+
+                            <!-- Vérifie si l'utilisateur connecté est le créateur de la sortie -->
+                            {% if sortie.organisateur == app.user %}
+                                <!-- Bouton pour modifier la sortie, uniquement visible pour le créateur -->
+                                <a href="{{ path('app_sortie_modif', { 'id': sortie.id }) }}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <!-- Bouton pour annuler la sortie, uniquement visible pour le créateur -->
+                                <a href="{{ path('app_sortie_annulation', { 'id': sortie.id }) }}" class="btn btn-danger">
+                                    <i class="fas fa-times-circle"></i> Annuler
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
