@@ -25,7 +25,7 @@ class AccueilController extends AbstractController
         $username = $user instanceof Participant ? $user->getPseudo() : 'Utilisateur non connecté';
 
         $participants = $participantRepository->findAll();
-        $sorties = $sortieRepository->findAll();
+        $sorties = $sortieRepository->findBy([], ['dateLimiteInscription' => 'ASC']);
         $campus = $campusRepository->findBy([]);
 
         return $this->render('global/accueil.html.twig', [

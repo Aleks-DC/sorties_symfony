@@ -77,7 +77,7 @@ class SortieController extends AbstractController
         } else {
             $etat = $etatRepository->findOneBy(['libelle' => Etat::ETAT_CREEE]);
             $message = 'Sortie modifiée et enregistrée avec succès.';
-            $redirectRoute = 'app_sortie_modification';
+            $redirectRoute = 'app_accueil';
         }
 
         if ($etat) {

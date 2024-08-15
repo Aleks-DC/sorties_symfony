@@ -14,3 +14,11 @@ body {
 footer {
     flex-shrink: 0;
 }
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+.form-check-input {
+    margin-right: 10px; /* Ajuste la marge entre la case à cocher et le label */
+}
