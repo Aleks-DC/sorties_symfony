@@ -12,12 +12,23 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
+
 
 class SortieCreationController extends AbstractController
 {
+    use TargetPathTrait; // Assure-toi que ce trait est bien inclus
     #[Route('/create/sortie', name: 'app_sortie_creation')]
     public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Vérifie si l'utilisateur est connecté
+        if (!$this->getUser()) {
+            // Sauvegarde l'URL actuelle (la page de création) avant redirection
+            $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('app_sortie_creation'));
+            // Redirige vers la page de login
+            return $this->redirectToRoute('app_login');
+        }
+
         $sortie = new Sortie();
 
         $form = $this->createForm(SortieCreationType::class, $sortie);
@@ -37,7 +48,7 @@ class SortieCreationController extends AbstractController
             }
         }
 
-        return $this->render('sortie_creation/index.html.twig', [
+        return $this->render('sortie_creation/sortie-creation.html.twig', [
             'sortieCreationForm' => $form->createView()
         ]);
     }
