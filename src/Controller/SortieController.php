@@ -94,4 +94,116 @@ class SortieController extends AbstractController
 
         return $this->redirectToRoute('app_accueil', ['id' => $id]);
     }
+
+    #[Route('/inscrire/{id}', name: 'inscription')]
+    public function inscription(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $participant = $this->getUser();
+        if (!$participant instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
+        }
+
+        if ($sortie->getEtat()->getLibelle() !== Etat::ETAT_OUVERTE || $sortie->getDateLimiteInscription() <= new DateTime()) {
+            $this->addFlash('error', 'Vous ne pouvez pas vous inscrire à cette sortie.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        if ($sortie->getOrganisateur()->getId() !== $participant->getId() && !$participant->estInscrit($sortie)) {
+            $participant->addSortiesPrevue($sortie);
+            $entityManager->flush();
+            $this->addFlash('success', 'Vous vous êtes inscrit avec succès.');
+        } else {
+            $this->addFlash('error', 'Vous ne pouvez pas vous inscrire à cette sortie.');
+        }
+        return $this->redirectToRoute('app_accueil');
+    }
+
+
+
+    //Indiquer le bon lien vers la page de formulaire
+    #[Route('/modifier/{id}', name: 'modifier')]
+    public function modifier(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $currentUser = $this->getUser();
+        if (!$currentUser instanceof Participant || $currentUser->getId() !== $sortie->getOrganisateur()->getId()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette sortie.');
+        }
+
+        $etatActuel = $sortie->getEtat()->getLibelle();
+        if ($etatActuel !== Etat::ETAT_CREEE && $etatActuel !== Etat::ETAT_OUVERTE) {
+            $this->addFlash('error', 'La sortie ne peut pas être modifiée.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        $form = $this->createForm(SortieType::class, $sortie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'La sortie a été modifiée avec succès.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        return $this->render('sortie/modifierSortie.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+    //indiquer le lien vers bonne page détails de la sortie
+    #[Route('/afficher/{id}', name: 'afficher')]
+    public function afficher(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        return $this->render('sortie/afficherSortie.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
+
+    #[Route('/publier/{id}', name: 'publier')]
+    public function publier(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $currentUser = $this->getUser();
+        if (!$currentUser instanceof Participant || $currentUser->getId() !== $sortie->getOrganisateur()->getId()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à publier cette sortie.');
+        }
+
+        // Vérifier que la sortie est en état "Créée"
+        if ($sortie->getEtat()->getLibelle() === Etat::ETAT_CREEE) {
+            $etatOuverte = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => Etat::ETAT_OUVERTE]);
+            if (!$etatOuverte) {
+                throw $this->createNotFoundException('État "Ouverte" non trouvé.');
+            }
+
+            $sortie->setEtat($etatOuverte);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La sortie a été publiée avec succès.');
+        } else {
+            $this->addFlash('error', 'La sortie ne peut pas être publiée.');
+        }
+
+        return $this->redirectToRoute('app_accueil');
+    }
+
 }

@@ -62,14 +62,30 @@
                     </a>
                 </td>
                 <td>
+                    <a href="{{ path('sortie_afficher', { 'id': sortie.id }) }}">Afficher</a>
                     {% if sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' %}
                         <a href="{{ path('sortie_annulation', { 'id': sortie.id }) }}"
                            type="submit">Annuler</a>
                     {% endif %}
-                    <p> - </p>
                     {% if sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' %}
                         {% if app.user is not null and app.user.estInscrit(sortie) %}
                             <a href="{{ path('sortie_desistement', { 'id': sortie.id }) }}">Se désister</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if sortie.organisateur.id != app.user.id
+                        and sortie.dateLimiteInscription > date() and not app.user.estInscrit(sortie) %}
+                        <a href="{{ path('sortie_inscription', { 'id': sortie.id }) }}"
+                           type="submit">S'inscrire</a>
+                        <br>
+                    {% endif %}
+                    {% if sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' %}
+                        {% if sortie.organisateur.id == app.user.id %}
+                            <a href="{{ path('sortie_modifier', { 'id': sortie.id }) }}">Modifier</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if sortie.etat.libelle == 'Créée' %}
+                        {% if sortie.organisateur.id == app.user.id %}
+                            <a href="{{ path('sortie_publier', { 'id': sortie.id }) }}">Publier</a>
                         {% endif %}
                     {% endif %}
                 </td>
