@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Sortie;
 use App\Form\ParticipantType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,27 +15,33 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/participant', name: 'participant_')]
 class ParticipantController extends AbstractController{
 
-    #[Route('/monProfil/{id}', name:'profil', methods: ['GET'])]
-    public function afficherProfil(EntityManagerInterface $entityManager, int $id): Response {
+    #[Route('/profil/{sortieId}', name:'profil', methods: ['GET'])]
+    public function afficherProfil(EntityManagerInterface $entityManager, int $sortieId): Response {
 
-        $participant = $entityManager->getRepository(Participant::class)->find($id);
-
-        if (!$participant) {
-            throw $this->createNotFoundException(
-                'No participant found for id '.$id
-            );
+        $sortie = $entityManager->getRepository(Sortie::class)->find($sortieId);
+        if (!$sortie) {
+            throw $this->createNotFoundException('No participant found for id '.$sortieId);
         }
+
+        $participant = $sortie->getOrganisateur();
+        if (!$participant) {
+            throw $this->createNotFoundException('No participant found for the sortie with id ' . $sortieId);
+        }
+
         return $this->render('participant/profil.html.twig', [
             'participant' => $participant
         ]);
     }
 
     #[Route('/modifierProfil/{id}', name: 'modifierProfil')]
-    public function modifierProfil(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    public function modifierProfil(Request $request,
+                                   EntityManagerInterface $entityManager,
+                                   UserPasswordHasherInterface $passwordHasher,
+                                   Participant $participant): Response
     {
-        $participant = $entityManager->getRepository(Participant::class)->find($id);
-        if (!$participant) {
-            throw $this->createNotFoundException('Le participant n\'existe pas');
+        $currentUser = $this->getUser();
+        if (!$currentUser instanceof Participant || $currentUser->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException('You are not allowed to modify this profile.');
         }
 
         $participantForm = $this->createForm(ParticipantType::class, $participant);
@@ -45,13 +52,14 @@ class ParticipantController extends AbstractController{
             $nouveauMotDePasse = $participantForm->get('nouveauMotDePasse')->getData();
             $confirmationNouveauMotDePasse = $participantForm->get('confirmationNouveauMotDePasse')->getData();
 
-            if ($motDePasseActuel !== $participant->getMotDePasse()) {
+            if (!$passwordHasher->isPasswordValid($participant, $motDePasseActuel)) {
                 $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
             } elseif (empty($nouveauMotDePasse) || $nouveauMotDePasse !== $confirmationNouveauMotDePasse) {
                 $this->addFlash('error', 'Le nouveau mot de passe et la confirmation ne correspondent pas.');
             } else {
-                // Remplacez le mot de passe par le nouveau mot de passe
-                $participant->setMotDePasse($nouveauMotDePasse);
+                // Hasher et Remplacer le mot de passe par le nouveau mot de passe
+                $hashedPassword = $passwordHasher->hashPassword($participant, $nouveauMotDePasse);
+                $participant->setMotDePasse($hashedPassword);
                 $this->addFlash('success', 'Mot de passe mis à jour avec succès.');
 
                 // Persistez les modifications
@@ -59,11 +67,12 @@ class ParticipantController extends AbstractController{
                 $entityManager->flush();
 
                 // Redirection après mise à jour réussie
-                return $this->redirectToRoute('participant_profil', ['id' => $id]);
+                return $this->redirectToRoute('participant_profil', ['id' => $participant->getId()]);
             }
         }
         return $this->render('participant/modifier.html.twig', [
             'participantForm' => $participantForm->createView(),
         ]);
     }
+
 }
