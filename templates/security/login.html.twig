@@ -12,11 +12,11 @@
 
                 {% if app.user %}
                     <div class="alert alert-info mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        Vous êtes connecter avec l'utilisateur {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter ?</a>
                     </div>
                 {% endif %}
 
-                <h1 class="h4 mb-3 text-center font-weight-normal">Please sign in</h1>
+                <h1 class="h4 mb-3 text-center font-weight-normal">S'inscrire</h1>
 
                 <div class="form-group">
                     <label for="username" class="form-label">Mail</label>
@@ -31,7 +31,7 @@
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                 <button class="btn btn-lg btn-primary w-100 mt-3" type="submit">
-                    Sign in
+                    Se connecter
                 </button>
             </form>
         </div>
