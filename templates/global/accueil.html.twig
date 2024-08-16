@@ -165,12 +165,10 @@
                                             {% endif %}
                                         {% endif %}
 
-                                        {% if etat == 'Ouverte' and sortie.organisateur != app.user %}
+                                        {% if etat == 'Ouverte' and app.user and sortie.organisateur != app.user %}
                                             <div class="row">
                                                 <!-- Bouton S'inscrire (si l'utilisateur n'est pas inscrit) -->
-                                                {% if app.user %}
-                                                {% if not app.user.estInscrit(sortie) %}   
-                                                {% endif %}
+                                                {% if not app.user.estInscrit(sortie) %}
                                                     <div class="col text-center">
                                                         <a href="{{ path('app_sortie_inscription', { 'id': sortie.id }) }}" class="btn btn-success btn-sm">
                                                             <i class="fas fa-plus-circle"></i> S'inscrire

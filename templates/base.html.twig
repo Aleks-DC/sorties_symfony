@@ -16,17 +16,19 @@
     <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
 
     {% block extrastyles %}{% endblock %}
-</head>
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash flash-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+    </head>
 
     <body>
         {% include 'global/nav.html.twig' %}
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

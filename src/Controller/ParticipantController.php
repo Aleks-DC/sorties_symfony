@@ -41,7 +41,7 @@ class ParticipantController extends AbstractController{
     {
         $currentUser = $this->getUser();
         if (!$currentUser instanceof Participant || $currentUser->getId() !== $participant->getId()) {
-            throw $this->createAccessDeniedException('You are not allowed to modify this profile.');
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier ce profil.');
         }
 
         $participantForm = $this->createForm(ParticipantType::class, $participant);
@@ -67,7 +67,14 @@ class ParticipantController extends AbstractController{
                 $entityManager->flush();
 
                 // Redirection après mise à jour réussie
-                return $this->redirectToRoute('participant_profil', ['id' => $participant->getId()]);
+                $sortie = $entityManager->getRepository(Sortie::class)->findOneBy(['organisateur' => $participant]);
+
+                if ($sortie) {
+                    return $this->redirectToRoute('participant_profil', ['sortieId' => $sortie->getId()]);
+                } else {
+                    // Si aucune sortie n'est trouvée
+                    return $this->redirectToRoute('app_accueil');
+                }
             }
         }
         return $this->render('participant/modifier.html.twig', [
