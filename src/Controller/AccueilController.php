@@ -44,21 +44,6 @@ class AccueilController extends AbstractController
         ]);
     }
 
-    #[Route('/search', name: 'app_search')]
-    public function search(ParticipantRepository $participantRepository, SortieRepository $sortieRepository): Response
-    {
-        $date = new DateTime();
-        $frDate = $date->format('d/m/Y');
-        $participants = $participantRepository->findAll()[2]->getNom();
-        $sortie = $sortieRepository->findAll();
-
-        return $this->render('global/search.html.twig', [
-            'controller_name' => 'AccueilController',
-            'date' => $frDate,
-            'participants' => $participants,
-            'sortie' => $sortie,
-        ]);
-    }
     private function updateEtatSorties(array $sorties, EntityManagerInterface $entityManager): void
     {
         $etatRepository = $entityManager->getRepository(Etat::class);

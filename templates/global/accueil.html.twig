@@ -107,8 +107,10 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if app.user.estInscrit(sortie) %}
-                                            <p>X</p> <!-- Affiche une croix -->
+                                        {% if app.user %}
+                                            {% if app.user.estInscrit(sortie) %}
+                                                <p>X</p> <!-- Affiche une croix si l'utilisateur est inscrit -->
+                                            {% endif %}
                                         {% endif %}
                                     </td>
                                     <td>
@@ -126,9 +128,10 @@
                                                 </a>
                                             </div>
                                         </div>
-
                                         {% set etat = sortie.etat.libelle %}
-                                        {% set inscrit = app.user.estInscrit(sortie) %}
+                                        {% if app.user %}
+                                            {% set inscrit = app.user.estInscrit(sortie) %}
+                                        {% endif %}
                                         <!-- Deuxième ligne avec les boutons "Modifier" et "Annuler" (côte à côte) -->
                                         {% if sortie.organisateur == app.user %}
                                             {% if etat == 'Créée' or etat == 'Ouverte' %}
@@ -160,23 +163,24 @@
                                             {% endif %}
                                         {% endif %}
 
-                                        {% if etat == 'Ouverte' and sortie.organisateur != app.user %}
+                                        {% if etat == 'Ouverte' and sortie.organisateur != app.user and app.user %}
                                             <div class="row">
                                                 <!-- Bouton S'inscrire (si l'utilisateur n'est pas inscrit) -->
-                                                {% if not app.user.estInscrit(sortie) %}
-                                                    <div class="col text-center">
-                                                        <a href="{{ path('app_sortie_inscription', { 'id': sortie.id }) }}" class="btn btn-success btn-sm">
-                                                            <i class="fas fa-plus-circle"></i> S'inscrire
-                                                        </a>
-                                                    </div>
-                                                {% else %}
-                                                    <!-- Bouton Se désister (si l'utilisateur est inscrit) -->
-                                                    <div class="col text-center">
-                                                        <a href="{{ path('app_sortie_desistement', { 'id': sortie.id }) }}" class="btn btn-secondary btn-sm">
-                                                            <i class="fas fa-minus-circle"></i> Se désister
-                                                        </a>
-                                                    </div>
-                                                {% endif %}
+                                                    {% if not app.user.estInscrit(sortie) %}
+                                                        <div class="col text-center">
+                                                            <a href="{{ path('app_sortie_inscription', { 'id': sortie.id }) }}" class="btn btn-success btn-sm">
+                                                                <i class="fas fa-plus-circle"></i> S'inscrire
+                                                            </a>
+                                                        </div>
+                                                    {% else %}
+                                                        <!-- Bouton Se désister (si l'utilisateur est inscrit) -->
+                                                        <div class="col text-center">
+                                                            <a href="{{ path('app_sortie_desistement', { 'id': sortie.id }) }}" class="btn btn-secondary btn-sm">
+                                                                <i class="fas fa-minus-circle"></i> Se désister
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+
                                             </div>
                                         {% endif %}
                                     </td>
