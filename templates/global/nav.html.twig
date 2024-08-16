@@ -1,6 +1,6 @@
     {% block body %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ path('app_accueil') }}">
+    <a class="navbar-brand" href="/Sortie-ENI/public">
         <img src="{{ asset('images/sortir.png') }}" alt="Logo de votre application" width="300" height="150" class="d-inline-block align-top">    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_accueil') }}">Accueil</a>
+            <a class="nav-link active" aria-current="page" href="/Sortie-ENI/public/">Accueil</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Villes</a>
@@ -16,18 +16,14 @@
         <li class="nav-item">
             <a class="nav-link" href="#">Campus</a>
         </li>
-            {% if app.user %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('participant_modifierProfil', {'id': app.user.id}) }}">Modifier mon profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Se déconnecter</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
-                </li>
-            {% endif %}
+        {% if app.user %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('participant_modifierProfil', {'id': app.user.id}) }}">Modifier mon profil</a>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Se déconnecter</a>
+        </li>
         </ul>
     </div>
     </nav>
