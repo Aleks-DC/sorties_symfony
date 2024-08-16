@@ -16,6 +16,7 @@ class Etat
     const ETAT_EN_COURS = 'Activité en cours';
     const ETAT_PASSEE = 'Passée';
     const ETAT_ANNULEE = 'Annulée';
+    const ETAT_ARCHIVEE = 'Archivée';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
