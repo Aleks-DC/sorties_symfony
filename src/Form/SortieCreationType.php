@@ -79,10 +79,7 @@ class SortieCreationType extends AbstractType
                 'label' => 'Publier la sortie',
                 'attr' => ['class' => 'btn btn-success']
             ])
-            ->add('annuler', ButtonType::class, [
-                'label' => 'Annuler',
-                'attr' => ['class' => 'btn btn-secondary', 'onclick' => 'window.location.href="/";']
-            ]);
+        ;
     }
     public function configureOptions(OptionsResolver $resolver): void
     {

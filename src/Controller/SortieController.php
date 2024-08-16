@@ -172,6 +172,7 @@ class SortieController extends AbstractController
         if ($participant instanceof Participant && $participant->estInscrit($sortie))  {
             if ($sortie->getDateHeureDebut() > new DateTime()) {
                 $participant->removeSortiesPrevue($sortie);
+                $sortie->removeEstInscrit($participant);
                 $entityManager->flush();
 
                  $this->addFlash('success', 'Vous vous êtes désisté avec succès.');
@@ -205,6 +206,7 @@ class SortieController extends AbstractController
 
         if ($sortie->getOrganisateur()->getId() !== $participant->getId() && !$participant->estInscrit($sortie)) {
             $participant->addSortiesPrevue($sortie);
+            $sortie->addEstInscrit($participant);
             $entityManager->flush();
             $this->addFlash('success', 'Vous vous êtes inscrit avec succès.');
         } else {

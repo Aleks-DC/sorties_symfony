@@ -111,7 +111,7 @@
                         <div class="col text-center mt-4">
                             {{ form_widget(sortieCreationForm.enregistrer, {'attr': {'class': 'btn btn-primary me-2'}}) }}
                             {{ form_widget(sortieCreationForm.publier, {'attr': {'class': 'btn btn-success me-2'}}) }}
-                            {{ form_widget(sortieCreationForm.annuler, {'attr': {'class': 'btn btn-secondary'}}) }}
+                            <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Annuler</a>
                         </div>
                     </div>
 
