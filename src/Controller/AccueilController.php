@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
-use App\Entity\Etat; 
+use App\Entity\Etat;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
@@ -38,6 +38,7 @@ class AccueilController extends AbstractController
 
         // Construction des critères de filtrage
         $qb = $sortieRepository->createQueryBuilder('s');
+        $qb->orderBy('s.dateHeureDebut', 'ASC');
 
         if (!empty($searchTerm)) {
             $qb->andWhere('s.nom LIKE :searchTerm')
@@ -60,12 +61,12 @@ class AccueilController extends AbstractController
         }
 
         if (!empty($inscrit)) {
-            $qb->andWhere(':user MEMBER OF s.participants')
+            $qb->andWhere(':user MEMBER OF s.estInscrit')
                ->setParameter('user', $user);
         }
 
         if (!empty($nonInscrit)) {
-            $qb->andWhere(':user NOT MEMBER OF s.participants')
+            $qb->andWhere(':user NOT MEMBER OF s.estInscrit')
                ->setParameter('user', $user);
         }
 
@@ -75,13 +76,14 @@ class AccueilController extends AbstractController
         }
 
         if (!empty($campus)) {
-            $qb->andWhere('s.campus = :campus')
+            $qb->andWhere('s.siteOrganisateur = :campus')
                ->setParameter('campus', $campus);
         }
 
         $sorties = $qb->getQuery()->getResult();
 
         $campusList = $campusRepository->findAll();
+        $inscrit = $user->getSortiesPrevues();
 
         return $this->render('global/accueil.html.twig', [
             'controller_name' => 'AccueilController',
