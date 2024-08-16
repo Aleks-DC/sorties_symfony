@@ -24,6 +24,12 @@ class AccueilController extends AbstractController
         $frDate = $date->format('d/m/Y');
 
         $user = $security->getUser();
+
+        if (!$user) {
+            // Redirige ou affiche un message si l'utilisateur n'est pas connecté
+            return $this->redirectToRoute('app_login');
+        }
+
         $username = $user instanceof Participant ? $user->getPseudo() : 'Utilisateur non connecté';
 
         // Récupération des paramètres de recherche
