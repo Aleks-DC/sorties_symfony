@@ -98,7 +98,7 @@
                             <!-- Vérifie si l'utilisateur connecté est le créateur de la sortie -->
                             {% if sortie.organisateur == app.user %}
                                 <!-- Bouton pour modifier la sortie, uniquement visible pour le créateur -->
-                                <a href="{{ path('app_sortie_modif', { 'id': sortie.id }) }}" class="btn btn-warning">
+                                <a href="{{ path('app_sortie_modifier', { 'id': sortie.id }) }}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Modifier
                                 </a>
                                 <!-- Bouton pour annuler la sortie, uniquement visible pour le créateur -->

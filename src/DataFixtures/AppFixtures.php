@@ -34,6 +34,8 @@ class AppFixtures extends Fixture
             'Clôturée',
             'Annulée',
             'Passée',
+            'Activité en cours',
+            'Archivée',
         ];
 
         foreach ($etats as $etatName) {

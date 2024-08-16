@@ -81,6 +81,8 @@
                                 <th>Date limite d'inscription</th>
                                 <th>Nombre maximum d'inscriptions</th>
                                 <th>État</th>
+                                <th>Inscrit</th>
+                                <th>Organisateur</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -105,6 +107,16 @@
                                         {% endif %}
                                     </td>
                                     <td>
+                                        {% if app.user.estInscrit(sortie) %}
+                                            <p>X</p> <!-- Affiche une croix -->
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('participant_profil', { 'sortieId': sortie.id }) }}">
+                                            {{ sortie.organisateur.pseudo }}
+                                        </a>
+                                    </td>
+                                    <td>
                                         <!-- Première ligne avec le bouton "Afficher" -->
                                         <div class="row mb-2">
                                             <div class="col text-center">
@@ -115,22 +127,56 @@
                                             </div>
                                         </div>
 
+                                        {% set etat = sortie.etat.libelle %}
+                                        {% set inscrit = app.user.estInscrit(sortie) %}
                                         <!-- Deuxième ligne avec les boutons "Modifier" et "Annuler" (côte à côte) -->
                                         {% if sortie.organisateur == app.user %}
-                                            <div class="row">
-                                                <!-- Colonne pour le bouton Modifier -->
-                                                <div class="col text-center">
-                                                    <a href="{{ path('app_sortie_modif', { 'id': sortie.id }) }}" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-edit"></i> Modifier
-                                                    </a>
-                                                </div>
+                                            {% if etat == 'Créée' or etat == 'Ouverte' %}
+                                                <div class="row">
+                                                    <!-- Colonne pour le bouton Modifier -->
+                                                    <div class="col text-center">
+                                                        <a href="{{ path('app_sortie_modifier', { 'id': sortie.id }) }}" class="btn btn-warning btn-sm">
+                                                            <i class="fas fa-edit"></i> Modifier
+                                                        </a>
+                                                    </div>
 
-                                                <!-- Colonne pour le bouton Annuler -->
-                                                <div class="col text-center">
-                                                    <a href="{{ path('app_sortie_annulation', { 'id': sortie.id }) }}" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-times-circle"></i> Annuler
-                                                    </a>
+                                                    <!-- Colonne pour le bouton Annuler -->
+                                                    <div class="col text-center">
+                                                        <a href="{{ path('app_sortie_annulation', { 'id': sortie.id }) }}" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-times-circle"></i> Annuler
+                                                        </a>
+                                                    </div>
                                                 </div>
+                                            {% endif %}
+                                            {% if etat == 'Créée' %}
+                                                <!-- Colonne pour le bouton Publier -->
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <a href="{{ path('app_sortie_publier', { 'id': sortie.id }) }}" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-paper-plane"></i> Publier
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if etat == 'Ouverte' and sortie.organisateur != app.user %}
+                                            <div class="row">
+                                                <!-- Bouton S'inscrire (si l'utilisateur n'est pas inscrit) -->
+                                                {% if not app.user.estInscrit(sortie) %}
+                                                    <div class="col text-center">
+                                                        <a href="{{ path('app_sortie_inscription', { 'id': sortie.id }) }}" class="btn btn-success btn-sm">
+                                                            <i class="fas fa-plus-circle"></i> S'inscrire
+                                                        </a>
+                                                    </div>
+                                                {% else %}
+                                                    <!-- Bouton Se désister (si l'utilisateur est inscrit) -->
+                                                    <div class="col text-center">
+                                                        <a href="{{ path('app_sortie_desistement', { 'id': sortie.id }) }}" class="btn btn-secondary btn-sm">
+                                                            <i class="fas fa-minus-circle"></i> Se désister
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         {% endif %}
                                     </td>
