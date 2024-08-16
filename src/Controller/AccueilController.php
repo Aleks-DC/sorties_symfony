@@ -80,6 +80,9 @@ class AccueilController extends AbstractController
                ->setParameter('campus', $campus);
         }
 
+        // Ajout du tri sur la date de début dans l'ordre ascendant
+        $qb->orderBy('s.dateHeureDebut', 'ASC');
+
         $sorties = $qb->getQuery()->getResult();
 
         $campusList = $campusRepository->findAll();
