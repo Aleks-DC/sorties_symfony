@@ -1,35 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div class="image-placeholder">#photo</div>
-    <div class="participant-details-infos">
-        <h2>{{ participant.pseudo }}</h2>
-        <div>
-            <label for="nom">Nom:</label>
-            <span id="nom">{{ participant.nom }}</span>
-        </div>
-        <div>
-            <label for="prenom">Prénom:</label>
-            <span id="prenom">{{ participant.prenom }}</span>
-        </div>
-        <div>
-            <label for="telephone">Téléphone:</label>
-            <span id="telephone">{{ participant.telephone }}</span>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <span id="email">{{ participant.mail }}</span>
-        </div>
-        <div>
-            <label for="campus">Campus:</label>
-            <span id="campus">{{ participant.campusAffilie.nom }}</span>
-        </div>
-    </div>
-    <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Retour</a>
-    <a href="{{ path('participant_modifierProfil', { 'id': participant.id }) }}" class="btn btn-secondary">Modifier mon profil</a>
-{% endblock %}
-
-
 {% block title %}
-    Profil de XXXXXX | {{ parent() }}
+    Profil de {{ app.user.pseudo }} | {{ parent() }}
 {% endblock %}
+
+{% block body %}
+    <section id="profile">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <h1 class="mb-4 text-center">Profil de {{ participant.pseudo }}</h1>
+
+                    <!-- Image and Upload Button Section -->
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="position-relative">
+                            <div class="image-placeholder" style="width: 200px; height: 200px; background-color: #f0f0f0; border: 1px solid #ccc;"></div>
+                            <button class="btn btn-light position-absolute bottom-0 end-0 me-2 mb-2">Télécharger photo</button>
+                        </div>
+                    </div>
+
+                    <!-- Information Section -->
+                    <div class="form-group row mb-3">
+                        <label class="col-form-label col-md-4"><strong>Nom :</strong></label>
+                        <div class="col-md-8">
+                            <p class="form-control-plaintext">{{ participant.nom }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-form-label col-md-4"><strong>Prénom :</strong></label>
+                        <div class="col-md-8">
+                            <p class="form-control-plaintext">{{ participant.prenom }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-form-label col-md-4"><strong>Téléphone :</strong></label>
+                        <div class="col-md-8">
+                            <p class="form-control-plaintext">{{ participant.telephone }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-form-label col-md-4"><strong>Email :</strong></label>
+                        <div class="col-md-8">
+                            <p class="form-control-plaintext">{{ participant.mail }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-form-label col-md-4"><strong>Campus :</strong></label>
+                        <div class="col-md-8">
+                            <p class="form-control-plaintext">{{ participant.campusAffilie.nom }}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Retour</a>
+                        {% if app.user and app.user.id == participant.id %}
+                            <a href="{{ path('participant_modifierProfil', { 'id': participant.id }) }}" class="btn btn-warning">
+                                Modifier mon profil
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+

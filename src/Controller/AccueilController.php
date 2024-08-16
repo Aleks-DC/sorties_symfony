@@ -40,6 +40,11 @@ class AccueilController extends AbstractController
         $qb = $sortieRepository->createQueryBuilder('s');
         $qb->orderBy('s.dateHeureDebut', 'ASC');
 
+        // Exclure les sorties en état archivé
+        $qb->join('s.etat', 'e')
+            ->andWhere('e.libelle != :archived')
+            ->setParameter('archived', Etat::ETAT_ARCHIVEE);
+
         if (!empty($searchTerm)) {
             $qb->andWhere('s.nom LIKE :searchTerm')
                ->setParameter('searchTerm', '%' . $searchTerm . '%');
