@@ -9,6 +9,7 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -22,8 +23,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortieCreationType extends AbstractType
 {
+    private Security $security;
+
+    // Inject Security service to access the current user
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        // Get the current user
+        $currentUser = $this->security->getUser();
+
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la sortie'
@@ -55,7 +67,9 @@ class SortieCreationType extends AbstractType
             ->add('siteOrganisateur', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'label' => 'Campus'
+                'label' => 'Campus',
+                'disabled' => true,  // Rendre le champ désactivé
+                'data' => $currentUser->getCampusAffilie() // Pré-remplir avec le campus de l'utilisateur
             ])
             ->add('enregistrer', SubmitType::class, [
                 'label' => 'Enregistrer',

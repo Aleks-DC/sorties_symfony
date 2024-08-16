@@ -41,6 +41,9 @@ class SortieCreationController extends AbstractController
 
             $sortie->setOrganisateur($currentUser);
 
+            // Associer le campus de l'utilisateur comme site organisateur
+            $sortie->setSiteOrganisateur($currentUser->getCampusAffilie());
+
             if ($form->get('enregistrer')->isClicked()) {
                 return $this->handleSortieAction($sortie, $entityManager, 'enregistrer');
             } elseif ($form->get('publier')->isClicked()) {
