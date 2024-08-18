@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification sortie{% endblock %}
+
+{% block body %}
+    <style>
+        label.required:before {
+            content: "* ";
+        }
+    </style>
+
+    <section id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-4 text-center">Modifier la sortie</h1>
+                    <span class="text-muted"><small>*: champ requis</small></span>
+                    {{ form_start(sortieCreationForm) }}
+
+                    <div class="row">
+                        <!-- Colonne de gauche -->
+                        <div class="col-md-6">
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.nom, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.nom, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.dateHeureDebut, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.dateHeureDebut, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.dateLimiteInscription, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.dateLimiteInscription, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.nbInscriptionsMax, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-4">
+                                    {{ form_widget(sortieCreationForm.nbInscriptionsMax, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.duree, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-4">
+                                    {{ form_widget(sortieCreationForm.duree, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <span class="align-self-center ms-2">minutes</span>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.infosSortie, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.infosSortie, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colonne de droite -->
+                        <div class="col-md-6">
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.siteOrganisateur, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.siteOrganisateur, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                {{ form_label(sortieCreationForm.lieu, null, {'label_attr': {'class': 'col-form-label col-md-4'}}) }}
+                                <div class="col-md-8">
+                                    {{ form_widget(sortieCreationForm.lieu, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <!-- Ajouter d'autres champs pour Rue, Ville, Code Postal, ... -->
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4">Rue :</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4">Ville :</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4">Code postal :</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4">Latitude :</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4">Longitude :</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-center mt-4">
+                            {{ form_widget(sortieCreationForm.enregistrer, {'attr': {'class': 'btn btn-primary me-2'}}) }}
+                            {{ form_widget(sortieCreationForm.publier, {'attr': {'class': 'btn btn-success me-2'}}) }}
+                            {{ form_widget(sortieCreationForm.annuler, {'attr': {'class': 'btn btn-secondary'}}) }}
+                        </div>
+                    </div>
+
+                    {{ form_end(sortieCreationForm) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

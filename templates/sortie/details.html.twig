@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la sortie{% endblock %}
+
+{% block body %}
+    <style>
+        label.required:before {
+            content: "* ";
+        }
+    </style>
+
+    <section id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-4 text-center">Détails de la sortie</h1>
+
+                    <div class="row">
+                        <!-- Colonne de gauche -->
+                        <div class="col-md-6">
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Nom :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.nom }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Date et heure de début :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Date limite d'inscription :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Nombre maximum d'inscriptions :</strong></label>
+                                <div class="col-md-4">
+                                    <p class="form-control-plaintext">{{ sortie.nbInscriptionsMax }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Durée :</strong></label>
+                                <div class="col-md-4">
+                                    <p class="form-control-plaintext">{{ sortie.duree }} minutes</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Informations :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.infosSortie }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colonne de droite -->
+                        <div class="col-md-6">
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Campus :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.siteOrganisateur.nom }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Lieu :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.lieu.nom }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Rue :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.lieu.rue }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Latitude :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.lieu.latitude }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label class="col-form-label col-md-4"><strong>Longitude :</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">{{ sortie.lieu.longitude }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-center mt-4">
+                            <a href="{{ path('app_accueil') }}" class="btn btn-secondary">Retour à la liste</a>
+
+                            <!-- Vérifie si l'utilisateur connecté est le créateur de la sortie -->
+                            {% if sortie.organisateur == app.user %}
+                                <!-- Bouton pour modifier la sortie, uniquement visible pour le créateur -->
+                                <a href="{{ path('app_sortie_modifier', { 'id': sortie.id }) }}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <!-- Bouton pour annuler la sortie, uniquement visible pour le créateur -->
+                                <a href="{{ path('app_sortie_annulation', { 'id': sortie.id }) }}" class="btn btn-danger">
+                                    <i class="fas fa-times-circle"></i> Annuler
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="display-4 text-center">Modifier le profil</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="participant-form mb-5">
+                    <h2 class="h4">Informations participant</h2>
+                    {{ form_start(participantForm, {'attr': {'class': 'form'}}) }}
+                    {{ form_row(participantForm.nom, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.prenom, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.telephone, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.mail, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.campusAffilie, {'attr': {'class': 'form-control mb-3'}}) }}
+                </div>
+                <div class="participant-form mb-5">
+                    <h2 class="h4">Informations de connexion</h2>
+                    {{ form_row(participantForm.pseudo, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.motDePasseActuel, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.nouveauMotDePasse, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_row(participantForm.confirmationNouveauMotDePasse, {'attr': {'class': 'form-control mb-3'}}) }}
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary">Modifier les informations</button>
+                </div>
+                {{ form_end(participantForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+Modifier le profil | {{ parent() }}
+{% endblock %}
