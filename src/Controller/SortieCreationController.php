@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\SortieCreationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class SortieCreationController extends AbstractController
 {
-    use TargetPathTrait; // Assure-toi que ce trait est bien inclus
+    use TargetPathTrait;
     #[Route('/create/sortie', name: 'app_sortie_creation')]
     public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {

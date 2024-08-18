@@ -25,7 +25,6 @@ class SortieCreationType extends AbstractType
 {
     private Security $security;
 
-    // Inject Security service to access the current user
     public function __construct(Security $security)
     {
         $this->security = $security;
@@ -33,7 +32,6 @@ class SortieCreationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-        // Get the current user
         $currentUser = $this->security->getUser();
 
         $builder
